@@ -3,7 +3,7 @@
     <div class="mt-20 h-full w-full flex flex-col justify-center items-center">
       <div class="w-96 border shadow p-7 rounded flex flex-col">
         <span class="font-semibold text-xl text-center font-mono"
-          >Agregar nueva Sucursal</span
+          >Agregar nuevo proveedor</span
         >
         <div class="mt-4 flex flex-col">
           <label
@@ -12,7 +12,7 @@
             >Nombre</label
           >
           <Field
-            placeholder="Escribe el nombre de la sucursal"
+            placeholder="Escribe el nombre de el proveedor"
             type="text"
             class="w-full text-xs py-1 px-2 border"
             name="name"
@@ -21,27 +21,6 @@
           <ErrorMessage
             class="text-xs font-mono text-red-500 mt-1"
             name="name"
-          />
-        </div>
-        <div class="mt-4 flex flex-col">
-          <label
-            for="name"
-            class="font-mono text-xs font-semibold from-gray-600"
-            >Direccion</label
-          >
-          <Field
-            as="textarea"
-            cols="3"
-            rows="4"
-            placeholder="Escribe el nombre del producto"
-            type="text"
-            class="w-full text-xs py-1 px-2 border"
-            name="addres"
-          />
-
-          <ErrorMessage
-            class="text-xs font-mono text-red-500 mt-1"
-            name="addres"
           />
         </div>
         <div class="mt-4 flex flex-col">
@@ -51,7 +30,7 @@
             >Numero de telefono</label
           >
           <Field
-            placeholder="Escribe el nombre del producto"
+            placeholder="Escribe el nombre de el proveedor"
             type="text"
             class="w-full text-xs py-1 px-2 border"
             name="phone"
@@ -60,6 +39,18 @@
           <ErrorMessage
             class="text-xs font-mono text-red-500 mt-1"
             name="phone"
+          />
+        </div>
+        <div class="mt-4 flex flex-col">
+          <label
+            for="name"
+            class="font-mono text-xs font-semibold from-gray-600"
+            >Nombre</label
+          >
+          <Field name="storesId" as="select" class="w-full text-xs py-1 px-2 border"></Field>
+          <ErrorMessage
+            class="text-xs font-mono text-red-500 mt-1"
+            name="name"
           />
         </div>
         <button
@@ -76,20 +67,20 @@
 <script>
 import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
-import stores from "../../api/stores.api";
+import categories from "../../api/categories.api";
 
 export default {
-  name: "StoresForm",
+  name: "CategoriesForm",
   props: {
-    getStores: {
+    getProviders: {
       type: Function,
     },
   },
   components: { Form, Field, ErrorMessage },
   data() {
     const schema = yup.object({
-      name: yup.string().required("El nombre es requerido"),
-      addres: yup.string().required("La direccion es requerida"),
+      storeId: yup.number().required("Debes seleccionar el proveedor"),
+      name:yup.string().required("El nombre es requerido"),
       phone: yup
         .string()
         .required("El numero de telefono es requerido")
@@ -101,11 +92,11 @@ export default {
   },
   methods: {
     onSubmit(values, { resetForm }) {
-      stores.addStore(values).then(({ data }) => {
+      categories.addCategorie(values).then(({ data }) => {
         if (data.ok) {
-          this.$emit("getStores");
+          this.$emit("getCategories");
           resetForm();
-          this.$toast.info(`Se agrego la sucursal con exito`, {
+          this.$toast.info(`Se agrego el tipo con exito`, {
             position: "bottom-right",
           });
         }
