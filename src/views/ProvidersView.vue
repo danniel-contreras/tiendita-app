@@ -38,10 +38,10 @@
           />
         </div>
       </div>
-      <stores-table :stores="stores" />
+      <providers-table :providers="providers" />
       <pagination-component
         v-if="totalPag > 1"
-        @method="getStores"
+        @method="getProviders"
         :currentPage="currentPage"
         :pages="pages"
         :totalPag="totalPag"
@@ -49,32 +49,38 @@
         :prev="prev"
       />
     </template>
-    <stores-form @getCategories="getStores" v-if="bread === 2" />
+    <providers-form
+      :stores="stores"
+      @getProviders="getProviders"
+      v-if="bread === 2"
+    />
   </layout-view>
 </template>
 
 <script>
 import LayoutView from "../layout/LayoutView.vue";
 import stores from "../api/stores.api";
-import StoresForm from "../components/Stores/StoresForm.vue";
+import providers from "../api/providers.api";
+import ProvidersForm from "../components/Providers/ProvidersForm.vue";
 import { paginate } from "../utils/utils";
 import InputIcon from "../components/Global/InputIcon.vue";
-import StoresTable from "../components/Stores/StoresTable.vue";
+import ProvidersTable from "../components/Providers/ProvidersTable.vue";
 import PaginationComponent from "../components/Global/PaginationComponent.vue";
 
 export default {
   name: "ProvidersView",
   components: {
     LayoutView,
-    StoresForm,
+    ProvidersForm,
     InputIcon,
-    StoresTable,
+    ProvidersTable,
     PaginationComponent,
   },
   data() {
     return {
       bread: 1,
       stores: {},
+      providers: {},
       pages: [],
       currentPage: 0,
       next: 0,
@@ -87,10 +93,16 @@ export default {
       this.bread = op;
     },
     getStores(page = 1) {
-      stores.getStores(page).then(({ data }) => {
+      stores.getStores(page, 100).then(({ data }) => {
         if (data.ok) {
-            console.log(data)
           this.stores = data.stores;
+        }
+      });
+    },
+    getProviders(page = 1) {
+      providers.getProviders(page).then(({ data }) => {
+        if (data.ok) {
+          this.providers = data.providers;
           this.pages = paginate(data.curentPag, data.totalPag, 1);
           this.totalPag = data.totalPag;
           this.next = data.nextPag;
@@ -100,9 +112,10 @@ export default {
       });
     },
   },
-  mounted(){
-      this.getStores(1)
-  }
+  mounted() {
+    this.getStores(1);
+    this.getProviders(1);
+  },
 };
 </script>
 

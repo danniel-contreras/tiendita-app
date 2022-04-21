@@ -38,16 +38,18 @@
           />
         </div>
       </div>
-      <categories-table :categories="categories" />
-      <pagination-component v-if="totalPag > 1"
-      @method="getCategories"
-      :currentPage="currentPage"
-      :pages="pages"
-      :totalPag="totalPag"
-      :next="next"
-      :prev="prev"/>
+      <categories-table @setEdit="setEdit" :categories="categories" />
+      <pagination-component
+        v-if="totalPag > 1"
+        @method="getCategories"
+        :currentPage="currentPage"
+        :pages="pages"
+        :totalPag="totalPag"
+        :next="next"
+        :prev="prev"
+      />
     </template>
-    <categories-form @getCategories="getCategories" v-if="bread === 2" />
+    <categories-form :categorie="categorie" :title="title" @getCategories="getCategories" v-if="bread === 2" />
   </layout-view>
 </template>
 
@@ -58,14 +60,22 @@ import InputIcon from "../components/Global/InputIcon.vue";
 import LayoutView from "../layout/LayoutView.vue";
 import categories from "../api/categories.api";
 import { paginate } from "../utils/utils";
-import PaginationComponent from '../components/Global/PaginationComponent.vue';
+import PaginationComponent from "../components/Global/PaginationComponent.vue";
 
 export default {
-  components: { LayoutView, CategoriesTable, CategoriesForm, InputIcon, PaginationComponent },
+  components: {
+    LayoutView,
+    CategoriesTable,
+    CategoriesForm,
+    InputIcon,
+    PaginationComponent,
+  },
   data() {
     return {
       bread: 1,
+      title:"Agregar nueva Categoria",
       categories: {},
+      categorie: {},
       pages: [],
       currentPage: 0,
       next: 0,
@@ -77,7 +87,12 @@ export default {
     changeBread(op) {
       this.bread = op;
     },
-    getCategories(page=1) {
+    setEdit(categorie) {
+      this.changeBread(2);
+      this.title ="Actualizar categoria"
+      this.categorie = categorie;
+    },
+    getCategories(page = 1) {
       categories.getCategories(page).then(({ data }) => {
         if (data.ok) {
           this.categories = data.categories;

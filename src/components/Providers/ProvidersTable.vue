@@ -7,12 +7,14 @@
         <thead>
           <th-table name="ID" />
           <th-table name="Nombre" />
+          <th-table name="Telefono" />
           <th-table name="Acciones" />
         </thead>
         <tbody>
-          <tr v-for="cat in categories" v-bind:key="cat.id">
-            <td-table :name="cat.id" />
-            <td-table :name="cat.name" />
+          <tr v-for="prov in providers" v-bind:key="prov.id">
+            <td-table :name="prov.id" />
+            <td-table :name="prov.name" />
+            <td-table :name="prov.phone" />
             <td-table>
             <div class="flex">
               <button>
@@ -43,7 +45,7 @@ import ThTable from "../Global/ThTable.vue";
 export default {
   name: "CategoriesTable",
   props: {
-    categories: { type: Object },
+    providers: { type: Object },
   },
   components: {
     TdTable,

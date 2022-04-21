@@ -1,10 +1,14 @@
 <template>
-  <Form @submit="onSubmit" :initial-values="old" :validation-schema="schema">
+  <Form
+    @submit="onSubmit"
+    :initial-values="categorie"
+    :validation-schema="schema"
+  >
     <div class="mt-20 h-full w-full flex flex-col justify-center items-center">
       <div class="w-96 border shadow p-7 rounded flex flex-col">
-        <span class="font-semibold text-xl text-center font-mono"
-          >Agregar nueva categoria</span
-        >
+        <span class="font-semibold text-xl text-center font-mono">{{
+          title
+        }}</span>
         <div class="mt-4 flex flex-col">
           <label
             for="name"
@@ -45,6 +49,8 @@ export default {
     getCategories: {
       type: Function,
     },
+    title: { type: String },
+    categorie: { type: Object, required: false },
   },
   components: { Form, Field, ErrorMessage },
   data() {
@@ -57,11 +63,28 @@ export default {
   },
   methods: {
     onSubmit(values, { resetForm }) {
-      categories.addCategorie(values).then(({ data }) => {
+      if (this.categorie) {
+        this.put(values, this.categorie.id);
+        return;
+      }
+      this.post(values, resetForm);
+    },
+    post(data, reset) {
+      categories.addCategorie(data).then(({ data }) => {
         if (data.ok) {
           this.$emit("getCategories");
-          resetForm();
+          reset();
           this.$toast.info(`Se agrego el tipo con exito`, {
+            position: "bottom-right",
+          });
+        }
+      });
+    },
+    put(data, id) {
+      categories.putCategorie(data, id).then(({ data }) => {
+        if (data.ok) {
+          this.$emit("getCategories");
+          this.$toast.info(`Se actualizo la categoria con exito`, {
             position: "bottom-right",
           });
         }

@@ -8,6 +8,7 @@ import {
   faPen,
   faChevronLeft,
   faChevronRight,
+  faTimes
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -21,7 +22,8 @@ library.add(
   faTrash,
   faPen,
   faChevronLeft,
-  faChevronRight
+  faChevronRight,
+  faTimes
 );
 
 export { FontAwesomeIcon };

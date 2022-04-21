@@ -30,7 +30,7 @@
             >Numero de telefono</label
           >
           <Field
-            placeholder="Escribe el nombre de el proveedor"
+            placeholder="Escribe el numero de telefono"
             type="text"
             class="w-full text-xs py-1 px-2 border"
             name="phone"
@@ -45,12 +45,25 @@
           <label
             for="name"
             class="font-mono text-xs font-semibold from-gray-600"
-            >Nombre</label
+            >Sucursal</label
           >
-          <Field name="storesId" as="select" class="w-full text-xs py-1 px-2 border"></Field>
+          <Field
+            name="storeId"
+            as="select"
+            class="w-full text-xs py-1 px-2 border"
+          >
+            <option value="" selected>Selecciona la sucursal</option>
+            <option
+              v-for="store in stores"
+              v-bind:key="store.id"
+              :value="store.id"
+            >
+              {{ store.name }}
+            </option>
+          </Field>
           <ErrorMessage
             class="text-xs font-mono text-red-500 mt-1"
-            name="name"
+            name="storeId"
           />
         </div>
         <button
@@ -67,24 +80,30 @@
 <script>
 import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
-import categories from "../../api/categories.api";
+import providers from "../../api/providers.api";
 
 export default {
-  name: "CategoriesForm",
+  name: "ProvidersForm",
   props: {
     getProviders: {
       type: Function,
+    },
+    stores: {
+      type: Object,
     },
   },
   components: { Form, Field, ErrorMessage },
   data() {
     const schema = yup.object({
-      storeId: yup.number().required("Debes seleccionar el proveedor"),
-      name:yup.string().required("El nombre es requerido"),
+      storeId: yup
+        .number()
+        .required("Debes seleccionar el proveedor")
+        .typeError("Debes seleccionar el proveedor"),
+      name: yup.string().required("El nombre es requerido"),
       phone: yup
         .string()
         .required("El numero de telefono es requerido")
-        .matches(/^[0-9]\d{3}-?\d{4}$/, "Numero de telefono invalido")
+        .matches(/^[0-9]\d{3}-?\d{4}$/, "Numero de telefono invalido"),
     });
     return {
       schema,
@@ -92,11 +111,11 @@ export default {
   },
   methods: {
     onSubmit(values, { resetForm }) {
-      categories.addCategorie(values).then(({ data }) => {
+      providers.addProvider(values).then(({ data }) => {
         if (data.ok) {
-          this.$emit("getCategories");
+          this.$emit("getProviders");
           resetForm();
-          this.$toast.info(`Se agrego el tipo con exito`, {
+          this.$toast.info(`Se agrego el proveedor`, {
             position: "bottom-right",
           });
         }
