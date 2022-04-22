@@ -38,7 +38,7 @@
           />
         </div>
       </div>
-      <stores-table :stores="stores" />
+      <stores-table @setEdit="setEdit" :stores="stores" />
       <pagination-component
         v-if="totalPag > 1"
         @method="getStores"
@@ -49,7 +49,7 @@
         :prev="prev"
       />
     </template>
-    <stores-form @getCategories="getStores" v-if="bread === 2" />
+    <stores-form :store="store" :title="title" @getStores="getStores" v-if="bread === 2" />
   </layout-view>
 </template>
 
@@ -75,6 +75,8 @@ export default {
     return {
       bread: 1,
       stores: {},
+      title:"Agregar nueva sucursal",
+      store:{},
       pages: [],
       currentPage: 0,
       next: 0,
@@ -85,6 +87,11 @@ export default {
   methods: {
     changeBread(op) {
       this.bread = op;
+    },
+    setEdit(store) {
+      this.changeBread(2);
+      this.title ="Actualizar sucursal"
+      this.store = store;
     },
     getStores(page = 1) {
       stores.getStores(page).then(({ data }) => {

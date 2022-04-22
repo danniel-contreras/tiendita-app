@@ -1,10 +1,10 @@
 <template>
-  <Form @submit="onSubmit" :initial-values="old" :validation-schema="schema">
+  <Form @submit="onSubmit" :initial-values="store" :validation-schema="schema">
     <div class="mt-20 h-full w-full flex flex-col justify-center items-center">
       <div class="w-96 border shadow p-7 rounded flex flex-col">
-        <span class="font-semibold text-xl text-center font-mono"
-          >Agregar nueva Sucursal</span
-        >
+        <span class="font-semibold text-xl text-center font-mono">{{
+          title
+        }}</span>
         <div class="mt-4 flex flex-col">
           <label
             for="name"
@@ -84,6 +84,13 @@ export default {
     getStores: {
       type: Function,
     },
+    title: {
+      type: String,
+    },
+    store: {
+      type: Object,
+      required: false,
+    },
   },
   components: { Form, Field, ErrorMessage },
   data() {
@@ -93,7 +100,7 @@ export default {
       phone: yup
         .string()
         .required("El numero de telefono es requerido")
-        .matches(/^[0-9]\d{3}-?\d{4}$/, "Numero de telefono invalido")
+        .matches(/^[0-9]\d{3}-?\d{4}$/, "Numero de telefono invalido"),
     });
     return {
       schema,
@@ -101,11 +108,28 @@ export default {
   },
   methods: {
     onSubmit(values, { resetForm }) {
-      stores.addStore(values).then(({ data }) => {
+      if (this.store) {
+        this.put(values);
+        return;
+      }
+      this.post(values, resetForm);
+    },
+    post(data, reset) {
+      stores.addStore(data).then(({ data }) => {
         if (data.ok) {
           this.$emit("getStores");
-          resetForm();
+          reset();
           this.$toast.info(`Se agrego la sucursal con exito`, {
+            position: "bottom-right",
+          });
+        }
+      });
+    },
+    put(data) {
+      stores.putStore(data, this.store.id).then(({ data }) => {
+        if (data.ok) {
+          this.$emit("getStores");
+          this.$toast.info(`Se actualizo la sucursal con exito`, {
             position: "bottom-right",
           });
         }
