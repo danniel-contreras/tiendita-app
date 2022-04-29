@@ -7,14 +7,16 @@
         <thead>
           <th-table name="ID" />
           <th-table name="Nombre" />
-          <th-table name="Telefono" />
+          <th-table name="Apellido" />
+          <th-table name="Email" />
           <th-table name="Acciones" />
         </thead>
         <tbody>
-          <tr v-for="prov in providers" v-bind:key="prov.id">
-            <td-table :name="prov.id" />
-            <td-table :name="prov.name" />
-            <td-table :name="prov.phone" />
+          <tr v-for="us in users" v-bind:key="us.id">
+            <td-table :name="us.id" />
+            <td-table :name="us.name" />
+            <td-table :name="us.lastname" />
+            <td-table :name="us.email" />
             <td-table>
             <div class="flex">
               <button @click="edit(prov)">
@@ -43,9 +45,9 @@ import TdTable from "../Global/TdTable.vue";
 import ThTable from "../Global/ThTable.vue";
 
 export default {
-  name: "CategoriesTable",
+  name: "UsersTable",
   props: {
-    providers: { type: Object },
+    users: { type: Object },
     setEdit:{type:Function}
   },
   components: {

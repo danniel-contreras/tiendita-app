@@ -1,29 +1,38 @@
 <template>
-  <div class="bg-gray-200 w-screen h-screen flex justify-center items-center">
-    <img class="absolute top-28 w-44 z-10" src="../assets/8c6o8XKri.png" alt="">
-    <div class="rounded w-96 h-64 absolute bg-gray-50 shadow-lg"></div>
+  <div class="w-screen h-screen flex justify-center items-center">
+    <div class="bg-gradient-2 w-screen h-screen fixed"></div>
+
     <div
-      class="rounded absolute border w-80 p-8 h-80 bg-white shadow-lg flex flex-col justify-center"
+      class="rounded-2xl not-blur z-50 border w-80 p-8 h-96 px-14 bg-white shadow-lg flex flex-col justify-center"
     >
-      <p class="text-3xl font-mono">Bienvenido!!</p>
+      <p class="text-3xl font-mono text-gradient">Bienvenido!!</p>
       <div class="mt-6 flex flex-col items-start">
-        <label class="text-sm font-bold font-mono">Email</label>
+        <label class="text-sm font-bold text-gradient font-mono">Email</label>
         <input
           placeholder="Escribe tu correo"
           class="border outline-none font-mono text-xs py-1 w-full rounded px-2"
         />
       </div>
       <div class="mt-6 flex flex-col items-start">
-        <label class="text-sm font-bold font-mono">Password</label>
+        <label class="text-sm font-bold text-gradient font-mono"
+          >Password</label
+        >
         <input
           placeholder="Escribe tu password"
           class="border outline-none font-mono text-xs py-1 w-full rounded px-2"
         />
       </div>
-      <button class="mt-4 bg-gray-800 text-white py-2 rounded font-mono">
-        Iniciar Sesion
-      </button>
+      <div class="border-gradient-2 mt-5 flex justify-center items-center">
+        <button class="w-full h-full bg-white rounded-2xl py-1">
+          <span class="text-gradient font-semibold text-lg font-mono"
+            >Iniciar Sesion</span
+          >
+        </button>
+      </div>
     </div>
+    <div
+      class="rounded-tr-2xl z-50 rounded-br-2xl w-4 h-80 bg-gradient-1 shadow-lg"
+    ></div>
   </div>
 </template>
 

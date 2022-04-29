@@ -2,30 +2,30 @@
   <layout-view>
     <div class="w-full">
       <ol
-        class="flex justify-center text-gray-500 bg-gray-100 rounded py-2 px-2"
+        class="flex justify-center text-gray-500 bg-gray-200 rounded py-2 px-2"
       >
         <li
           @click="changeBread(1)"
-          class="px-2 cursor-pointer text-gradient"
-          :class="bread === 1 && `font-bold`"
+          class="px-2 cursor-pointer"
+          :class="bread === 1 && `text-blue-500 font-semibold`"
         >
-          Listado de Sucursales
+          Listado de Usuarios
         </li>
         <li class="text-gray-500 select-none">&rsaquo;</li>
         <li
           @click="changeBread(2)"
-          class="px-2 cursor-pointer text-gradient"
-          :class="bread === 2 && `font-bold`"
+          class="px-2 cursor-pointer"
+          :class="bread === 2 && `text-blue-500 font-semibold`"
         >
-          Agregar / Editar Sucursal
+          Agregar / Editar Usuario
         </li>
       </ol>
     </div>
     <template v-if="bread === 1">
       <div class="w-full flex mt-5">
         <span
-          class="whitespace-nowrap font-semibold font-mono text-xs text-gradient mt-1"
-          >Buscar sucursal</span
+          class="whitespace-nowrap font-semibold font-mono text-xs text-gray-500 mt-1"
+          >Buscar usuario</span
         >
         <div
           class="relative flex w-full text-gray-600 focus-within:text-gray-400"
@@ -38,10 +38,10 @@
           />
         </div>
       </div>
-      <stores-table @setEdit="setEdit" :stores="stores" />
+      <users-table @setEdit="setEdit" :users="users" />
       <pagination-component
         v-if="totalPag > 1"
-        @method="getStores"
+        @method="getProviders"
         :currentPage="currentPage"
         :pages="pages"
         :totalPag="totalPag"
@@ -49,34 +49,44 @@
         :prev="prev"
       />
     </template>
-    <stores-form :store="store" :title="title" @getStores="getStores" v-if="bread === 2" />
+    <users-form
+      :stores="stores"
+      :roles="roles"
+      :provider="provider"
+      :title="title"
+      @getUsers="getUsers"
+      v-if="bread === 2"
+    />
   </layout-view>
 </template>
 
 <script>
 import LayoutView from "../layout/LayoutView.vue";
-import stores from "../api/stores.api";
-import StoresForm from "../components/Stores/StoresForm.vue";
+import roles from "../api/rol.api";
+import users from "../api/users.api"
+import store from "../api/stores.api"
 import { paginate } from "../utils/utils";
 import InputIcon from "../components/Global/InputIcon.vue";
-import StoresTable from "../components/Stores/StoresTable.vue";
 import PaginationComponent from "../components/Global/PaginationComponent.vue";
+import UsersTable from '../components/Users/UsersTable.vue';
+import UsersForm from '../components/Users/UsersForm.vue';
 
 export default {
-  name: "StoresView",
+  name: "UsersView",
   components: {
     LayoutView,
-    StoresForm,
     InputIcon,
-    StoresTable,
     PaginationComponent,
+    UsersTable,
+    UsersForm,
   },
   data() {
     return {
       bread: 1,
-      stores: {},
-      title:"Agregar nueva sucursal",
-      store:{},
+      roles: {},
+      users:{},
+      stores:{},
+      title: "Agregar nuevo Proveedor",
       pages: [],
       currentPage: 0,
       next: 0,
@@ -88,16 +98,15 @@ export default {
     changeBread(op) {
       this.bread = op;
     },
-    setEdit(store) {
+    setEdit(provider) {
       this.changeBread(2);
-      this.title ="Actualizar sucursal"
-      this.store = store;
+      this.title = "Actualizar proveedor";
+      this.provider = { ...provider, storeId: provider.storesId };
     },
-    getStores(page = 1) {
-      stores.getStores(page).then(({ data }) => {
+    getUsers(page = 1) {
+      users.getUsers(page).then(({ data }) => {
         if (data.ok) {
-            console.log(data)
-          this.stores = data.stores;
+          this.users = data.users;
           this.pages = paginate(data.curentPag, data.totalPag, 1);
           this.totalPag = data.totalPag;
           this.next = data.nextPag;
@@ -106,10 +115,26 @@ export default {
         }
       });
     },
+    getRoles() {
+      roles.getRoles().then(({ data }) => {
+        if (data.ok) {
+          this.roles = data.rol
+        }
+      });
+    },
+    getStores() {
+      store.getStores(1,100).then(({ data }) => {
+        if (data.ok) {
+          this.stores = data.stores
+        }
+      });
+    },
   },
-  mounted(){
-      this.getStores(1)
-  }
+  mounted() {
+    this.getRoles();
+    this.getStores()
+    this.getUsers(1);
+  },
 };
 </script>
 

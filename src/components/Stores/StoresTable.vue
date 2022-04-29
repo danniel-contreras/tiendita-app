@@ -40,7 +40,7 @@
     <modal-component
       @close="closeModal"
       v-show="isModalVisible"
-      title="Eliminar Sucursal"
+      title="Eliminar Sucursal "
     >
       <div class="flex justify-center items-center text-center">
         <span class="font-mono font-semibold text-center"

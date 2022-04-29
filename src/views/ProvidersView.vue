@@ -38,7 +38,7 @@
           />
         </div>
       </div>
-      <providers-table :providers="providers" />
+      <providers-table @setEdit="setEdit" :providers="providers" />
       <pagination-component
         v-if="totalPag > 1"
         @method="getProviders"
@@ -51,6 +51,8 @@
     </template>
     <providers-form
       :stores="stores"
+      :provider="provider"
+      :title="title"
       @getProviders="getProviders"
       v-if="bread === 2"
     />
@@ -81,6 +83,8 @@ export default {
       bread: 1,
       stores: {},
       providers: {},
+      provider: {},
+      title: "Agregar nuevo Proveedor",
       pages: [],
       currentPage: 0,
       next: 0,
@@ -91,6 +95,11 @@ export default {
   methods: {
     changeBread(op) {
       this.bread = op;
+    },
+    setEdit(provider) {
+      this.changeBread(2);
+      this.title = "Actualizar proveedor";
+      this.provider = { ...provider, storeId: provider.storesId };
     },
     getStores(page = 1) {
       stores.getStores(page, 100).then(({ data }) => {

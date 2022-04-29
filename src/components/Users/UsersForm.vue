@@ -29,25 +29,59 @@
         </div>
         <div class="mt-4 flex flex-col">
           <label
-            for="name"
+            for="lastname"
             class="font-mono text-xs font-semibold from-gray-600"
-            >Numero de telefono</label
+            >Apellido</label
           >
           <Field
             placeholder="Escribe el numero de telefono"
             type="text"
             class="w-full text-xs py-1 px-2 border"
-            name="phone"
+            name="lastname"
           />
 
           <ErrorMessage
             class="text-xs font-mono text-red-500 mt-1"
-            name="phone"
+            name="lastname"
           />
         </div>
         <div class="mt-4 flex flex-col">
           <label
-            for="name"
+            for="email"
+            class="font-mono text-xs font-semibold from-gray-600"
+            >Email</label
+          >
+          <Field
+            placeholder="Escribe el nombre de el proveedor"
+            type="text"
+            class="w-full text-xs py-1 px-2 border"
+            name="email"
+          />
+          <ErrorMessage
+            class="text-xs font-mono text-red-500 mt-1"
+            name="email"
+          />
+        </div>
+        <div class="mt-4 flex flex-col">
+          <label
+            for="pass"
+            class="font-mono text-xs font-semibold from-gray-600"
+            >Contraseña</label
+          >
+          <Field
+            placeholder="Escribe el nombre de el proveedor"
+            type="text"
+            class="w-full text-xs py-1 px-2 border"
+            name="pass"
+          />
+          <ErrorMessage
+            class="text-xs font-mono text-red-500 mt-1"
+            name="pass"
+          />
+        </div>
+        <div class="mt-4 flex flex-col">
+          <label
+            for="storeId"
             class="font-mono text-xs font-semibold from-gray-600"
             >Sucursal</label
           >
@@ -70,6 +104,27 @@
             name="storeId"
           />
         </div>
+        <div class="mt-4 flex flex-col">
+          <label
+            for="rolId"
+            class="font-mono text-xs font-semibold from-gray-600"
+            >Rol</label
+          >
+          <Field
+            name="rolId"
+            as="select"
+            class="w-full text-xs py-1 px-2 border"
+          >
+            <option value="" selected>Selecciona el rol</option>
+            <option v-for="rol in roles" v-bind:key="rol.id" :value="rol.id">
+              {{ rol.role }}
+            </option>
+          </Field>
+          <ErrorMessage
+            class="text-xs font-mono text-red-500 mt-1"
+            name="rolId"
+          />
+        </div>
         <button
           type="submit"
           class="bg-blue-500 text-white text-xs py-2 font-mono mt-4 rounded"
@@ -84,32 +139,36 @@
 <script>
 import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
-import providers from "../../api/providers.api";
+import users from "../../api/users.api";
 
 export default {
-  name: "ProvidersForm",
+  name: "UsersForm",
   props: {
-    getProviders: {
+    getUsers: {
       type: Function,
     },
     stores: {
       type: Object,
     },
-    provider: { type: Object },
+    user: { type: Object },
     title: { type: String },
+    roles: { type: Object },
   },
   components: { Form, Field, ErrorMessage },
   data() {
     const schema = yup.object({
+      rolId: yup
+        .number()
+        .required("Debes seleccionar el rol")
+        .typeError("Debes seleccionar el rol"),
       storeId: yup
         .number()
-        .required("Debes seleccionar el proveedor")
-        .typeError("Debes seleccionar el proveedor"),
-      name: yup.string().required("El nombre es requerido"),
-      phone: yup
-        .string()
-        .required("El numero de telefono es requerido")
-        .matches(/^[0-9]\d{3}-?\d{4}$/, "Numero de telefono invalido"),
+        .required("Debes seleccionar la sucursal")
+        .typeError("Debes seleccionar la sucursal"),
+      name: yup.string().required("Debes escribir el nombre"),
+      lastname: yup.string().required("Debes escribir el apellido"),
+      email: yup.string().required("Debes escribir el email"),
+      pass: yup.string().required("Debes escribir la contraseña"),
     });
     return {
       schema,
@@ -124,21 +183,21 @@ export default {
       this.post(values, resetForm);
     },
     post(data, resetForm) {
-      providers.addProvider(data).then(({ data }) => {
+      users.addUser(data).then(({ data }) => {
         if (data.ok) {
-          this.$emit("getProviders");
+          this.$emit("getUsers");
           resetForm();
-          this.$toast.info(`Se agrego el proveedor`, {
+          this.$toast.info(`Se agrego el usuario`, {
             position: "bottom-right",
           });
         }
       });
     },
     put(data) {
-      providers.putProvider(data, this.provider.id).then(({ data }) => {
+      users.putUser(data, this.user.id).then(({ data }) => {
         if (data.ok) {
-          this.$emit("getProviders");
-          this.$toast.info(`Se actualizo el proveedor`, {
+          this.$emit("getUsers");
+          this.$toast.info(`Se actualizo el usuario`, {
             position: "bottom-right",
           });
         }

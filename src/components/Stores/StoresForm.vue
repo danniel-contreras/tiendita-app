@@ -2,13 +2,13 @@
   <Form @submit="onSubmit" :initial-values="store" :validation-schema="schema">
     <div class="mt-20 h-full w-full flex flex-col justify-center items-center">
       <div class="w-96 border shadow p-7 rounded flex flex-col">
-        <span class="font-semibold text-xl text-center font-mono">{{
+        <span class="font-semibold text-2xl text-gradient text-center font-mono">{{
           title
         }}</span>
         <div class="mt-4 flex flex-col">
           <label
             for="name"
-            class="font-mono text-xs font-semibold from-gray-600"
+            class="font-mono text-xs font-semibold text-gradient"
             >Nombre</label
           >
           <Field
@@ -26,7 +26,7 @@
         <div class="mt-4 flex flex-col">
           <label
             for="name"
-            class="font-mono text-xs font-semibold from-gray-600"
+            class="font-mono text-xs font-semibold text-gradient"
             >Direccion</label
           >
           <Field
@@ -47,7 +47,7 @@
         <div class="mt-4 flex flex-col">
           <label
             for="name"
-            class="font-mono text-xs font-semibold from-gray-600"
+            class="font-mono text-xs font-semibold text-gradient"
             >Numero de telefono</label
           >
           <Field
@@ -62,12 +62,13 @@
             name="phone"
           />
         </div>
-        <button
-          type="submit"
-          class="bg-blue-500 text-white text-xs py-2 font-mono mt-4 rounded"
-        >
-          Guardar
+        <div class="border-gradient-2 mt-5 flex justify-center items-center">
+        <button type="submit" class="w-full h-full button-gradient bg-white rounded-2xl py-1">
+          <span class="text-gradient font-semibold text-base font-mono"
+            >Guardar</span
+          >
         </button>
+      </div>
       </div>
     </div>
   </Form>

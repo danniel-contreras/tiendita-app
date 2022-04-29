@@ -8,4 +8,10 @@ export default {
   async getProviders(page) {
     return await axios.get(`${URL}providers?page=${page}`);
   },
+  async putProvider(data,id) {
+    return await axios.put(`${URL}providers/${id}`, data);
+  },
+  async deleteProvider(id) {
+    return await axios.delete(`${URL}providers/${id}`);
+  },
 };

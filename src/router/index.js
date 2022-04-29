@@ -5,6 +5,7 @@ import CategoriesView from "../views/CategoriesView.vue";
 import StoresView from "../views/StoresView.vue";
 import ProvidersView from "../views/ProvidersView.vue";
 const ProductsView = () => import("../views/ProductsView.vue");
+const UsersView = () => import("../views/UsersView.vue")
 
 const routes = [
   {
@@ -36,6 +37,11 @@ const routes = [
     path: "/products",
     name: "products",
     component: ProductsView,
+  },
+  {
+    path: "/users",
+    name: "users",
+    component: UsersView,
   },
   {
     path: "/about",
