@@ -117,7 +117,7 @@ export default {
   },
   methods: {
     onSubmit(values, { resetForm }) {
-      if (this.provider) {
+      if (this.provider.id) {
         this.put(values);
         return;
       }

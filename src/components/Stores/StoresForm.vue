@@ -109,7 +109,7 @@ export default {
   },
   methods: {
     onSubmit(values, { resetForm }) {
-      if (this.store) {
+      if (this.store.id) {
         this.put(values);
         return;
       }

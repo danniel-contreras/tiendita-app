@@ -63,7 +63,7 @@ export default {
   },
   methods: {
     onSubmit(values, { resetForm }) {
-      if (this.categorie) {
+      if (this.categorie.id) {
         this.put(values, this.categorie.id);
         return;
       }

@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { isUserLoggedApi } from "../api/token.api";
 import AuthView from "../views/AuthView.vue";
 import HomeView from "../views/HomeView.vue";
 import CategoriesView from "../views/CategoriesView.vue";
@@ -10,13 +11,13 @@ const UsersView = () => import("../views/UsersView.vue")
 const routes = [
   {
     path: "/",
-    name: "auth",
-    component: AuthView,
-  },
-  {
-    path: "/home",
     name: "home",
     component: HomeView,
+  },
+  {
+    path: "/login",
+    name: "auth",
+    component: AuthView,
   },
   {
     path: "/categories",
@@ -57,6 +58,23 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+});
+const auth = isUserLoggedApi();
+router.beforeEach((to, _, next) => {
+  // redirect to login page if not logged in and trying to access a restricted page
+  const publicPages = ["/login"];
+  const authRequired = !publicPages.includes(to.path);
+  const authNotRequired = publicPages.includes(to.path);
+
+  if (authNotRequired && auth) {
+    return next("/");
+  }
+
+  if (authRequired && !auth) {
+    return next("/login");
+  }
+
+  next();
 });
 
 export default router;
