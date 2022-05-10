@@ -1,9 +1,12 @@
 <script>
 export default {
-  props: ["title"],
+  props: {
+    title: { type: String },
+    close: { type: Function },
+  },
   name: "ModalComponent",
   methods: {
-    close() {
+    closeM() {
       this.$emit("close");
     },
   },
@@ -16,7 +19,7 @@ export default {
       <div
         class="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex"
       >
-        <div class="relative w-auto my-6 mx-auto max-w-sm">
+        <div class="relative w-auto my-6 mx-auto max-w-3xl">
           <!--content-->
           <div
             class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none"
@@ -25,10 +28,12 @@ export default {
             <div
               class="flex items-start justify-between p-3 border-b border-solid border-blueGray-200 rounded-t"
             >
-              <h3 class="text-xl font-thin font-mono">{{ title }}</h3>
+              <h3 class="text-base font-thin font-mono whitespace-nowrap">
+                {{ title }}
+              </h3>
               <button
                 class="p-1 ml-6 border-0 text-black float-right text-base leading-none font-semibold outline-none focus:outline-none"
-                v-on:click="close()"
+                @click="closeM()"
               >
                 <font-awesome-icon icon="times" />
               </button>

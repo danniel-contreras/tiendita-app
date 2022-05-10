@@ -8,7 +8,11 @@ import {
   faPen,
   faChevronLeft,
   faChevronRight,
-  faTimes
+  faTimes,
+  faUser,
+  faShoppingBag,
+  faShoppingCart,
+  faSignOutAlt
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -23,7 +27,11 @@ library.add(
   faPen,
   faChevronLeft,
   faChevronRight,
-  faTimes
+  faTimes,
+  faUser,
+  faShoppingBag,
+  faShoppingCart,
+  faSignOutAlt
 );
 
 export { FontAwesomeIcon };

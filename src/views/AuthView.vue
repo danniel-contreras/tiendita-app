@@ -15,7 +15,7 @@
             placeholder="Escribe tu correo"
             class="border outline-none font-mono text-xs py-1 w-full rounded px-2"
           />
-        <ErrorMessage class="text-xs font-mono text-red-500" name="email" />
+          <ErrorMessage class="text-xs font-mono text-red-500" name="email" />
         </div>
         <div class="mt-6 flex flex-col items-start">
           <label class="text-sm font-bold text-gradient font-mono"
@@ -71,24 +71,34 @@ export default {
   },
   methods: {
     onSubmit(values) {
-      auth.login(values).then(({data}) => {
-        if (data.ok) {
-          this.$toast.info(`Bienvenido!!!`, {
+      auth
+        .login(values)
+        .then(({ data }) => {
+          if (data.ok) {
+            this.$toast.info(`Bienvenido!!!`, {
+              position: "bottom-right",
+            });
+            const logindata = {
+              state: true,
+              data: decodeToken(data.token),
+            };
+            this.$router.go("/");
+            this.$store.dispatch("setAuth", logindata);
+            setToken(data.token, data.data?.roles.id, data.data?.stores.id);
+          }
+        })
+        .catch(({ response }) => {
+          console.log(response)
+          if (!response.ok) {
+            this.$toast.warning(`Datos invalidos!`, {
+              position: "bottom-right",
+            });
+            return;
+          }
+          this.$toast.error(`Ah ocurrido un error inesperado!`, {
             position: "bottom-right",
           });
-          const logindata = {
-            state: true,
-            data: decodeToken(data.token),
-          };
-          this.$router.go("/");
-          this.$store.dispatch("setAuth", logindata);
-          setToken(data.token,data.data?.roles.id, data.data?.stores.id);
-          return;
-        }
-        this.$toast.error(`Datos invalidos!`, {
-          position: "bottom-right",
         });
-      });
     },
   },
 };

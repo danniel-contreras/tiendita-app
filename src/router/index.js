@@ -7,6 +7,8 @@ import StoresView from "../views/StoresView.vue";
 import ProvidersView from "../views/ProvidersView.vue";
 const ProductsView = () => import("../views/ProductsView.vue");
 const UsersView = () => import("../views/UsersView.vue")
+const ShoppingHistoryView = () => import("../views/ShoppingHistoryView.vue")
+const SalesHistoryView = () => import("../views/SalesHistoryView.vue")
 
 const routes = [
   {
@@ -43,6 +45,16 @@ const routes = [
     path: "/users",
     name: "users",
     component: UsersView,
+  },
+  {
+    path: "/shopping-history",
+    name: "shopping-history",
+    component: ShoppingHistoryView,
+  },
+  {
+    path: "/sales-history",
+    name: "sales-history",
+    component: SalesHistoryView,
   },
   {
     path: "/about",

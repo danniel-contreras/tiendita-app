@@ -2,9 +2,10 @@
   <Form @submit="onSubmit" :initial-values="store" :validation-schema="schema">
     <div class="mt-20 h-full w-full flex flex-col justify-center items-center">
       <div class="w-96 border shadow p-7 rounded flex flex-col">
-        <span class="font-semibold text-2xl text-gradient text-center font-mono">{{
-          title
-        }}</span>
+        <span
+          class="font-semibold text-2xl text-gradient text-center font-mono"
+          >{{ title }}</span
+        >
         <div class="mt-4 flex flex-col">
           <label
             for="name"
@@ -63,12 +64,15 @@
           />
         </div>
         <div class="border-gradient-2 mt-5 flex justify-center items-center">
-        <button type="submit" class="w-full h-full button-gradient bg-white rounded-2xl py-1">
-          <span class="text-gradient font-semibold text-base font-mono"
-            >Guardar</span
+          <button
+            type="submit"
+            class="w-full h-full button-gradient bg-white rounded-2xl py-1"
           >
-        </button>
-      </div>
+            <span class="text-gradient font-semibold text-base font-mono"
+              >Guardar</span
+            >
+          </button>
+        </div>
       </div>
     </div>
   </Form>

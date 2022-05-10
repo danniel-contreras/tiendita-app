@@ -2,20 +2,22 @@
   <layout-view>
     <div class="w-full">
       <ol
-        class="flex justify-center text-gray-500 bg-gray-200 rounded py-2 px-2"
+        class="flex justify-center text-gray-500 bg-gray-100 rounded py-2 px-2"
       >
         <li
           @click="changeBread(1)"
-          class="px-2 cursor-pointer"
-          :class="bread === 1 && `text-blue-500 font-semibold`"
+          class="px-2 cursor-pointer text-gradient md:text-xs lg:text-sm"
+          :class="bread === 1 && `font-bold`"
         >
           Listado de Productos
         </li>
-        <li class="text-gray-500 select-none">&rsaquo;</li>
+        <li class="text-gray-500 select-none md:text-xs lg:text-sm">
+          &rsaquo;
+        </li>
         <li
           @click="changeBread(2)"
-          class="px-2 cursor-pointer"
-          :class="bread === 2 && `text-blue-500 font-semibold`"
+          class="px-2 cursor-pointer text-gradient md:text-xs lg:text-sm"
+          :class="bread === 2 && `font-bold`"
         >
           Agregar / Editar Producto
         </li>
@@ -33,12 +35,44 @@
           <input-icon />
           <input
             type="text"
+            v-model="name"
+            @keyup="changeName"
             class="border w-full rounded ml-3 text-xs py-1 px-2 pl-8 font-mono"
             placeholder="Escribe para buscar..."
           />
         </div>
       </div>
-      <products-table :products="products" />
+      <div class="grid grid-cols-2 gap-6 mt-6">
+        <div class="flex flex-col">
+          <span
+            class="whitespace-nowrap font-semibold font-mono text-xs text-gray-500 mt-1"
+            >Buscar por sucursal</span
+          >
+          <select v-model="store" @change="changeSearch" class="border w-full rounded text-xs py-1 px-2 font-mono">
+            <option disabled selected>Selecciona la sucursal</option>
+            <option v-for="(cat, i) in stores" :key="i" :value="cat.name">
+              {{ cat.name }}
+            </option>
+          </select>
+        </div>
+        <div class="flex flex-col">
+          <span
+            class="whitespace-nowrap font-semibold font-mono text-xs text-gray-500 mt-1"
+            >Buscar por categoria</span
+          >
+          <select
+            @change="changeSearch"
+            v-model="categorie"
+            class="border w-full rounded text-xs py-1 px-2 font-mono"
+          >
+            <option disabled selected>Selecciona la categoria</option>
+            <option v-for="(cat, i) in categories" :key="i" :value="cat.name">
+              {{ cat.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <products-table @setEdit="setEdit" :products="products" />
       <pagination-component
         v-if="totalPag > 1"
         @method="getProducts"
@@ -52,7 +86,10 @@
     <products-form
       :categories="categories"
       :stores="stores"
+      :title="title"
+      :product="product"
       v-if="bread === 2"
+      @getProducts="getProducts"
     />
   </layout-view>
 </template>
@@ -65,26 +102,51 @@ import stores from "../api/stores.api";
 import categories from "../api/categories.api";
 import products from "../api/products.api";
 import { paginate } from "../utils/utils";
+import PaginationComponent from "../components/Global/PaginationComponent.vue";
+import InputIcon from "../components/Global/InputIcon.vue";
+import { getStore } from "../api/token.api";
 
 export default {
   name: "ProductsView",
-  components: { LayoutView, ProductsTable, ProductsForm },
+  components: {
+    LayoutView,
+    ProductsTable,
+    ProductsForm,
+    PaginationComponent,
+    InputIcon,
+  },
   data() {
     return {
       bread: 1,
       stores: {},
       categories: {},
       products: {},
+      title: "Agregar nuevo producto",
+      product: {},
       pages: [],
       currentPage: 0,
       next: 0,
       prev: 0,
       totalPag: 0,
+      store: getStore(),
+      name: "",
+      categorie: "",
     };
   },
   methods: {
+    changeName() {
+      this.getProducts(1, this.store, "", this.name);
+    },
+    changeSearch() {
+      this.getProducts(1, this.store, this.categorie, this.name);
+    },
     changeBread(op) {
       this.bread = op;
+    },
+    setEdit(prod) {
+      this.changeBread(2);
+      this.title = "Actualizar Producto";
+      this.product = prod;
     },
     getStores() {
       stores.getStores(1, 100).then(({ data }) => {
@@ -100,8 +162,8 @@ export default {
         }
       });
     },
-    getProducts(page = 1) {
-      products.getProducts(page).then(({ data }) => {
+    getProducts(page = 1, store, categorie = "", name = "") {
+      products.getProducts(page, store, categorie, name).then(({ data }) => {
         if (data.ok) {
           this.products = data.products;
           this.pages = paginate(data.curentPag, data.totalPag, 1);
@@ -116,7 +178,7 @@ export default {
   mounted() {
     this.getStores();
     this.getCategories();
-    this.getProducts()
+    this.getProducts();
   },
 };
 </script>

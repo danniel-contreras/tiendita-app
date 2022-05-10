@@ -6,15 +6,15 @@
       >
         <li
           @click="changeBread(1)"
-          class="px-2 cursor-pointer text-gradient"
+          class="px-2 cursor-pointer text-gradient md:text-xs lg:text-sm"
           :class="bread === 1 && `font-bold`"
         >
           Listado de Sucursales
         </li>
-        <li class="text-gray-500 select-none">&rsaquo;</li>
+        <li class="text-gray-500 select-none md:text-xs lg:text-sm">&rsaquo;</li>
         <li
           @click="changeBread(2)"
-          class="px-2 cursor-pointer text-gradient"
+          class="px-2 cursor-pointer text-gradient md:text-xs lg:text-sm"
           :class="bread === 2 && `font-bold`"
         >
           Agregar / Editar Sucursal

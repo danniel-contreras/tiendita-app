@@ -1,5 +1,5 @@
 import { createStore } from "vuex";
-import { isUserLoggedApi, getToken, decodeToken,deleteToken } from "../api/token.api";
+import { isUserLoggedApi, getToken, decodeToken,removeToken } from "../api/token.api";
 
 const token = getToken();
 const data = {
@@ -16,7 +16,7 @@ const store = createStore({
       commit("SET_AUTH", auth);
     },
     setLoggout({ commit }) {
-      deleteToken()
+      removeToken()
       commit("SET_LOGGOUT");
     },
   },

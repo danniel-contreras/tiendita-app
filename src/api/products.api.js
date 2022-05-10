@@ -10,14 +10,21 @@ export default {
       },
     });
   },
-  async getProducts(page) {
+  async getProducts(page, store = getStore(), categorie, name) {
     return await axios.get(
-      `${URL}products?page=${page}&storeId=${getStore()}`,
+      `${URL}products?page=${page}&storeId=${store}&categorie=${categorie}&name=${name}`,
       {
         headers: {
           authorization: getToken(),
         },
       }
     );
+  },
+  async putProduct(data, id) {
+    return await axios.put(`${URL}products/${id}`, data, {
+      headers: {
+        authorization: getToken(),
+      },
+    });
   },
 };

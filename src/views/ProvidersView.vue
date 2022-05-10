@@ -1,21 +1,23 @@
 <template>
   <layout-view>
     <div class="w-full">
-      <ol
-        class="flex justify-center text-gray-500 bg-gray-200 rounded py-2 px-2"
+     <ol
+        class="flex justify-center text-gray-500 bg-gray-100 rounded py-2 px-2"
       >
         <li
           @click="changeBread(1)"
-          class="px-2 cursor-pointer"
-          :class="bread === 1 && `text-blue-500 font-semibold`"
+          class="px-2 cursor-pointer text-gradient md:text-xs lg:text-sm"
+          :class="bread === 1 && `font-bold`"
         >
           Listado de Proveedores
         </li>
-        <li class="text-gray-500 select-none">&rsaquo;</li>
+        <li class="text-gray-500 select-none md:text-xs lg:text-sm">
+          &rsaquo;
+        </li>
         <li
           @click="changeBread(2)"
-          class="px-2 cursor-pointer"
-          :class="bread === 2 && `text-blue-500 font-semibold`"
+          class="px-2 cursor-pointer text-gradient md:text-xs lg:text-sm"
+          :class="bread === 2 && `font-bold`"
         >
           Agregar / Editar Proveedor
         </li>
@@ -24,7 +26,7 @@
     <template v-if="bread === 1">
       <div class="w-full flex mt-5">
         <span
-          class="whitespace-nowrap font-semibold font-mono text-xs text-gray-500 mt-1"
+          class="whitespace-nowrap font-semibold font-mono text-xs text-gradient mt-1"
           >Buscar sucursal</span
         >
         <div

@@ -1,14 +1,21 @@
 <template>
-  <Form @submit="onSubmit" :initial-values="old" :validation-schema="schema">
-    <div class="mt-8 h-full w-full flex flex-col justify-center items-center">
-      <div class="w-96 border shadow p-7 rounded flex flex-col">
-        <span class="font-semibold text-xl text-center font-mono"
-          >Agregar nuevo Producto</span
+  <Form
+    @submit="onSubmit"
+    :initial-values="product"
+    :validation-schema="schema"
+  >
+    <div
+      class="md:mt-6 lg:mt-8 h-full w-full flex flex-col justify-center items-center"
+    >
+      <div class="w-96 border shadow md:p-5 lg:p-7 rounded flex flex-col">
+        <span
+          class="font-semibold md:text-sm lg:text-base text-gradient text-center font-mono"
+          >{{ title }}</span
         >
-        <div class="mt-4 flex flex-col">
+        <div class="md:mt-3 lg:mt-4 flex flex-col">
           <label
             for="name"
-            class="font-mono text-xs font-semibold from-gray-600"
+            class="font-mono text-xs font-semibold text-gradient"
             >Nombre</label
           >
           <Field
@@ -23,10 +30,10 @@
             name="name"
           />
         </div>
-        <div class="mt-4 flex flex-col">
+        <div class="md:mt-3 lg:mt-4 flex flex-col">
           <label
             for="name"
-            class="font-mono text-xs font-semibold from-gray-600"
+            class="font-mono text-xs font-semibold text-gradient"
             >Stock</label
           >
           <Field
@@ -41,10 +48,10 @@
             name="stock"
           />
         </div>
-        <div class="mt-4 flex flex-col">
+        <div class="md:mt-3 lg:mt-4 flex flex-col">
           <label
             for="name"
-            class="font-mono text-xs font-semibold from-gray-600"
+            class="font-mono text-xs font-semibold text-gradient"
             >Stock Minimo</label
           >
           <Field
@@ -59,10 +66,10 @@
             name="minimunStock"
           />
         </div>
-        <div class="mt-4 flex flex-col">
+        <div class="md:mt-3 lg:mt-4 flex flex-col">
           <label
             for="name"
-            class="font-mono text-xs font-semibold from-gray-600"
+            class="font-mono text-xs font-semibold text-gradient"
             >Precio</label
           >
           <Field
@@ -77,10 +84,10 @@
             name="price"
           />
         </div>
-        <div class="mt-4 flex flex-col">
+        <div class="md:mt-3 lg:mt-4 flex flex-col">
           <label
             for="name"
-            class="font-mono text-xs font-semibold from-gray-600"
+            class="font-mono text-xs font-semibold text-gradient"
             >Codigo</label
           >
           <Field
@@ -95,10 +102,10 @@
             name="code"
           />
         </div>
-        <div class="mt-4 flex flex-col">
+        <div class="md:mt-3 lg:mt-4 flex flex-col">
           <label
             for="name"
-            class="font-mono text-xs font-semibold from-gray-600"
+            class="font-mono text-xs font-semibold text-gradient"
             >Categoria</label
           >
           <Field
@@ -122,10 +129,10 @@
             name="categoriesId"
           />
         </div>
-        <div class="mt-4 flex flex-col">
+        <div class="md:mt-3 lg:mt-4 flex flex-col">
           <label
             for="name"
-            class="font-mono text-xs font-semibold from-gray-600"
+            class="font-mono text-xs font-semibold text-gradient"
             >Sucursal</label
           >
           <Field
@@ -149,12 +156,18 @@
             name="storesId"
           />
         </div>
-        <button
-          type="submit"
-          class="bg-blue-500 text-white text-xs py-2 font-mono mt-4 rounded"
+        <div
+          class="border-gradient-2 md:mt-4 lg:mt-5 flex justify-center items-center"
         >
-          Guardar
-        </button>
+          <button
+            type="submit"
+            class="w-full h-full button-gradient bg-white rounded-2xl py-1"
+          >
+            <span class="text-gradient font-semibold text-base font-mono"
+              >Guardar</span
+            >
+          </button>
+        </div>
       </div>
     </div>
   </Form>
@@ -173,6 +186,10 @@ export default {
     },
     categories: { type: Object },
     stores: { type: Object },
+    product: {
+      type: Object,
+    },
+    title: { type: String },
   },
   components: { Form, Field, ErrorMessage },
   data() {
@@ -206,15 +223,54 @@ export default {
   },
   methods: {
     onSubmit(values, { resetForm }) {
-      products.addProduct(values).then(({ data }) => {
-        if (data.ok) {
-          this.$emit("getProducts");
-          resetForm();
-          this.$toast.info(`Se agrego el producto con exito`, {
+      if (this.product.id) {
+        this.put(this.product.id, values);
+        return;
+      }
+      this.post(resetForm, values);
+    },
+    post(resetForm, data) {
+      products
+        .addProduct(data)
+        .then(({ data }) => {
+          if (data.ok) {
+            this.$emit("getProducts");
+            resetForm();
+            this.$toast.info(`Se agrego el producto con exito`, {
+              position: "bottom-right",
+            });
+            return;
+          }
+          this.$toast.warning(`Ah ocurrido un error inesperado`, {
             position: "bottom-right",
           });
-        }
-      });
+        })
+        .catch(() => {
+          this.$toast.error(`Error Inesperado intente mas tarde`, {
+            position: "bottom-right",
+          });
+        });
+    },
+    put(id, data) {
+      products
+        .putProduct(data, id)
+        .then(({ data }) => {
+          if (data.ok) {
+            this.$emit("getProducts");
+            this.$toast.info(`Se actualizo el producto con exito`, {
+              position: "bottom-right",
+            });
+            return;
+          }
+          this.$toast.warning(`Ah ocurrido un error inesperado`, {
+            position: "bottom-right",
+          });
+        })
+        .catch(() => {
+          this.$toast.error(`Error Inesperado intente mas tarde`, {
+            position: "bottom-right",
+          });
+        });
     },
   },
 };

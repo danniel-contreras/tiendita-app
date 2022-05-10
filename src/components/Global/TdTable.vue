@@ -1,6 +1,6 @@
 <template>
   <td
-    class="px-5 py-3 border-b cursor-pointer border-gray-200 bg-white text-sm w-2/5"
+    class="px-5 py-3 border-b cursor-pointer border-gray-200 bg-white w-2/5"
   >
     <div class="flex items-center text-center">
       <div>
