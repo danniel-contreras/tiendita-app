@@ -9,6 +9,7 @@ import {
   faChevronLeft,
   faChevronRight,
   faTimes,
+  faPlus,
   faUser,
   faShoppingBag,
   faShoppingCart,
@@ -31,7 +32,8 @@ library.add(
   faUser,
   faShoppingBag,
   faShoppingCart,
-  faSignOutAlt
+  faSignOutAlt,
+  faPlus
 );
 
 export { FontAwesomeIcon };
