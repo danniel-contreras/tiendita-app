@@ -1,9 +1,5 @@
 <template>
-  <Form
-    @submit="onSubmit"
-    :initial-values="provider"
-    :validation-schema="schema"
-  >
+  <Form @submit="onSubmit" :initial-values="user" :validation-schema="schema">
     <div class="mt-20 h-full w-full flex flex-col justify-center items-center">
       <div class="w-96 border shadow p-7 rounded flex flex-col">
         <span class="font-semibold text-xl text-center font-mono">{{
@@ -62,7 +58,7 @@
             name="email"
           />
         </div>
-        <div class="mt-4 flex flex-col">
+        <div v-show="!user" class="mt-4 flex flex-col">
           <label
             for="pass"
             class="font-mono text-xs font-semibold from-gray-600"
@@ -125,12 +121,16 @@
             name="rolId"
           />
         </div>
-        <button
-          type="submit"
-          class="bg-blue-500 text-white text-xs py-2 font-mono mt-4 rounded"
-        >
-          Guardar
-        </button>
+       <div class="border-gradient-2 mt-5 flex justify-center items-center">
+          <button
+            type="submit"
+            class="w-full h-full button-gradient bg-white rounded-2xl py-1"
+          >
+            <span class="text-gradient font-semibold text-base font-mono"
+              >Guardar</span
+            >
+          </button>
+        </div>
       </div>
     </div>
   </Form>
@@ -183,25 +183,35 @@ export default {
       this.post(values, resetForm);
     },
     post(data, resetForm) {
-      users.addUser(data).then(({ data }) => {
-        if (data.ok) {
-          this.$emit("getUsers");
-          resetForm();
-          this.$toast.info(`Se agrego el usuario`, {
-            position: "bottom-right",
-          });
-        }
-      });
+      users
+        .addUser(data)
+        .then(({ data }) => {
+          if (data.ok) {
+            this.$emit("getUsers");
+            resetForm();
+            this.$toast.info(`Se agrego el usuario`, {
+              position: "bottom-right",
+            });
+          }
+        })
+        .catch(() => {
+          this.$toast.error("Ah ocurrido un error inesperado");
+        });
     },
     put(data) {
-      users.putUser(data, this.user.id).then(({ data }) => {
-        if (data.ok) {
-          this.$emit("getUsers");
-          this.$toast.info(`Se actualizo el usuario`, {
-            position: "bottom-right",
-          });
-        }
-      });
+      users
+        .putUser(data, this.user.id)
+        .then(({ data }) => {
+          if (data.ok) {
+            this.$emit("getUsers");
+            this.$toast.info(`Se actualizo el usuario`, {
+              position: "bottom-right",
+            });
+          }
+        })
+        .catch(() => {
+          this.$toast.error("Ah ocurrido un error inesperado");
+        });
     },
   },
 };

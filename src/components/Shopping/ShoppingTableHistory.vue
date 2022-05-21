@@ -5,20 +5,20 @@
     >
       <table class="min-w-full leading-normal">
         <thead>
-          <tr>
-            <th-table name="Fecha" />
-            <th-table name="Total" />
-            <th-table name="Acciones" />
-          </tr>
+          <th-table name="Fecha" />
+          <th-table name="Tipo de recibo" />
+          <th-table name="N° de recibo" />
+          <th-table name="Acciones" />
         </thead>
         <tbody>
-          <tr v-for="sale in sales" v-bind:key="sale.id">
-            <td-table :name="formatDate(sale.dateOfSale)" />
-            <td-table :name="`$${sale.total}`" />
+          <tr v-for="shop in shoppings" :key="shop.id">
+            <td-table :name="formatDate(shop.date)" />
+            <td-table :name="shop.voucherType" />
+            <td-table :name="shop.nVoucher" />
             <td-table>
               <div class="border-gradient-2 flex justify-center items-center">
                 <button
-                  @click="getDetails(sale.id)"
+                  @click="getDetails(shop.id)"
                   class="w-full h-full button-gradient bg-white rounded-2xl py-1 px-3"
                 >
                   <span
@@ -33,9 +33,9 @@
       </table>
     </div>
     <modal-component
-      v-show="visible"
       @close="showModal"
-      title="Detalles de la venta"
+      v-show="visible"
+      title="Detalles de la compra"
     >
       <div
         class="inline-block min-w-full border shadow-xl rounded-lg overflow-hidden"
@@ -44,15 +44,19 @@
           <thead>
             <tr>
               <th-table name="Producto" />
+              <th-table name="Precio Compra" />
+              <th-table name="Precio Venta" />
               <th-table name="Cantidad" />
-              <th-table v-show="!report" name="Total" />
+              <th-table name="Total" />
             </tr>
           </thead>
           <tbody>
-            <tr v-for="sal in sale" :key="sal.id">
-              <td-table :name="sal.products.name" />
-              <td-table :name="sal.quantity" />
-              <td-table v-show="!report" :name="`$` + sal.totalUnit" />
+            <tr v-for="shop in shopping" :key="shop.id">
+              <td-table :name="shop.products.name" />
+              <td-table :name="`$` + shop.purchasePrice" />
+              <td-table :name="`$` + shop.salePrice" />
+              <td-table :name="shop.quantity" />
+              <td-table :name="`$` + shop.totalUnit" />
             </tr>
           </tbody>
         </table>
@@ -62,22 +66,21 @@
 </template>
 
 <script>
+import TdTable from "../Global/TdTable.vue";
 import ThTable from "../Global/ThTable.vue";
 import { formatRelative, subDays } from "date-fns";
 import { es } from "date-fns/locale";
-import TdTable from "../Global/TdTable.vue";
-import { getDetailsSale } from "../../api/sale.api";
+import { getDetailsByShopping } from "../../api/shopping.api";
 import ModalComponent from "../Global/ModalComponent.vue";
 
 export default {
   components: { ThTable, TdTable, ModalComponent },
   props: {
-    sales: { type: Object },
-    report: { type: Boolean },
+    shoppings: { type: Array },
   },
   data() {
     return {
-      sale: [],
+      shopping: [],
       visible: false,
     };
   },
@@ -91,9 +94,9 @@ export default {
       });
     },
     getDetails(id) {
-      getDetailsSale(id).then(({ data }) => {
-        this.sale = data.sales;
+      getDetailsByShopping(id).then(({ data }) => {
         this.showModal();
+        this.shopping = data.detailShopping;
       });
     },
   },

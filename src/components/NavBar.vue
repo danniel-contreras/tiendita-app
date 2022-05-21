@@ -2,7 +2,8 @@
   <div class="flex flex-col justify-center h-screen">
     <ul>
       <li class="text-gray-200 text-xl md:text-sm font-mono font-semibold mt-2">
-        <font-awesome-icon icon="home" class="pl-3 text-base" /> Inicio
+        <font-awesome-icon icon="home" class="pl-3 text-base" /> 
+        <router-link class="ml-2" to="/">Inicio</router-link>
       </li>
       <li class="text-gray-200 text-xl md:text-sm font-mono font-semibold mt-2">
         <font-awesome-icon icon="shop" class="pl-3 text-base" /> 
@@ -31,6 +32,10 @@
       <li class="text-gray-200 text-xl md:text-sm font-mono font-semibold mt-2">
         <font-awesome-icon icon="shopping-bag" class="pl-3 text-base" />
          <router-link class="ml-2" to="/sales-history">Historial de Ventas</router-link>
+      </li>
+       <li class="text-gray-200 text-xl md:text-sm font-mono font-semibold mt-2">
+        <font-awesome-icon icon="chart-bar" class="pl-3 text-base" />
+         <router-link class="ml-2" to="/finances">Finanzas</router-link>
       </li>
       <li @click="loggout" class="text-gray-200 text-xl md:text-sm cursor-pointer font-mono font-semibold mt-2">
         <font-awesome-icon icon="sign-out-alt" class="pl-3 text-base" />

@@ -19,8 +19,15 @@
               <input
                 class="w-5 h-5 ml-6 pt-1"
                 type="checkbox"
-                :id="`input-sorbete` + index"
-                :value="{ name: prod.name, id: prod.id, qt: 1 }"
+                :id="`input-` + index"
+                :value="{
+                  name: prod.name,
+                  id: prod.id,
+                  quantity: 1,
+                  price: prod.price,
+                  salePrice: prod.price,
+                  purchasePrice: prod.price,
+                }"
                 v-model="product"
               />
             </td-table>
@@ -57,6 +64,7 @@
 import PaginationComponent from "../Global/PaginationComponent.vue";
 import TdTable from "../Global/TdTable.vue";
 import ThTable from "../Global/ThTable.vue";
+
 export default {
   components: { ThTable, TdTable, PaginationComponent },
   props: {

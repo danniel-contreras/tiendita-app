@@ -25,11 +25,11 @@
     </div>
     <template v-if="bread === 1">
       <div class="w-full flex mt-5">
-        <span
+        <span v-show="getAll"
           class="whitespace-nowrap font-semibold font-mono text-xs text-gray-500 mt-1"
-          >Buscar sucursal</span
+          >Buscar producto</span
         >
-        <div
+        <div v-show="getAll"
           class="relative flex w-full text-gray-600 focus-within:text-gray-400"
         >
           <input-icon />
@@ -41,14 +41,31 @@
             placeholder="Escribe para buscar..."
           />
         </div>
+        <div class="border-gradient-2 flex ml-20 justify-center items-center">
+          <button
+            @click="getProductByStock"
+            class="w-full h-full button-gradient bg-white rounded-2xl py-1 px-10"
+          >
+            <span
+              class="text-gradient whitespace-nowrap font-semibold text-base font-mono"
+              >{{
+                getAll ? "Productos sin stock" : "Todos los productos"
+              }}</span
+            >
+          </button>
+        </div>
       </div>
-      <div class="grid grid-cols-2 gap-6 mt-6">
+      <div v-show="getAll" class="grid grid-cols-2 gap-6 mt-6">
         <div class="flex flex-col">
           <span
             class="whitespace-nowrap font-semibold font-mono text-xs text-gray-500 mt-1"
             >Buscar por sucursal</span
           >
-          <select v-model="store" @change="changeSearch" class="border w-full rounded text-xs py-1 px-2 font-mono">
+          <select
+            v-model="store"
+            @change="changeSearch"
+            class="border w-full rounded text-xs py-1 px-2 font-mono"
+          >
             <option disabled selected>Selecciona la sucursal</option>
             <option v-for="(cat, i) in stores" :key="i" :value="cat.name">
               {{ cat.name }}
@@ -73,6 +90,9 @@
         </div>
       </div>
       <products-table @setEdit="setEdit" :products="products" />
+      <span v-show="empty" class="text-gray-600 font-semibold"
+        >No se an registrado productos</span
+      >
       <pagination-component
         v-if="totalPag > 1"
         @method="getProducts"
@@ -131,6 +151,8 @@ export default {
       store: getStore(),
       name: "",
       categorie: "",
+      empty: false,
+      getAll: true,
     };
   },
   methods: {
@@ -142,6 +164,8 @@ export default {
     },
     changeBread(op) {
       this.bread = op;
+      this.title = "Agregar nuevo producto";
+      this.product = {};
     },
     setEdit(prod) {
       this.changeBread(2);
@@ -149,30 +173,82 @@ export default {
       this.product = prod;
     },
     getStores() {
-      stores.getStores(1, 100).then(({ data }) => {
-        if (data.ok) {
-          this.stores = data.stores;
-        }
-      });
+      stores
+        .getStores(1, 100)
+        .then(({ data }) => {
+          if (data.ok) {
+            this.stores = data.stores;
+          }
+        })
+        .catch(({ data }) => {
+          this.empty = true;
+          if (!data.ok) {
+            this.$toast.warning("No hay sucursales para mostrar");
+            return;
+          }
+          this.$toast.error("Ah ocurrido un error inesperado");
+        });
     },
     getCategories() {
-      categories.getCategories(1, 1000).then(({ data }) => {
-        if (data.ok) {
-          this.categories = data.categories;
-        }
-      });
+      categories
+        .getCategories(1, 1000)
+        .then(({ data }) => {
+          if (data.ok) {
+            this.categories = data.categories;
+          }
+        })
+        .catch(({ data }) => {
+          if (!data.ok) {
+            this.$toast.warning("No hay categorias para mostrar");
+            return;
+          }
+          this.$toast.error("Ah ocurrido un error inesperado");
+        });
     },
     getProducts(page = 1, store, categorie = "", name = "") {
-      products.getProducts(page, store, categorie, name).then(({ data }) => {
-        if (data.ok) {
-          this.products = data.products;
-          this.pages = paginate(data.curentPag, data.totalPag, 1);
-          this.totalPag = data.totalPag;
-          this.next = data.nextPag;
-          this.prev = data.prevPag;
-          this.currentPage = data.curentPag;
-        }
-      });
+      this.getAll = true
+      products
+        .getProducts(page, store, categorie, name)
+        .then(({ data }) => {
+          if (data.ok) {
+            this.products = data.products;
+            this.pages = paginate(data.curentPag, data.totalPag, 1);
+            this.totalPag = data.totalPag;
+            this.next = data.nextPag;
+            this.prev = data.prevPag;
+            this.currentPage = data.curentPag;
+          }
+        })
+        .catch(({ data }) => {
+          this.empty = true;
+          if (!data.ok) {
+            this.$toast.warning("No hay registros para mostrar");
+            return;
+          }
+          this.$toast.error("Ah ocurrido un error inesperado");
+        });
+    },
+    getProductByStock() {
+      if (this.getAll) {
+        this.getAll = false
+        products
+          .getProductsStock()
+          .then(({ data }) => {
+            if (data.ok) {
+              this.products = data.products;
+            }
+          })
+          .catch(({ data }) => {
+            this.empty = true;
+            if (!data.ok) {
+              this.$toast.warning("No hay registros para mostrar");
+              return;
+            }
+            this.$toast.error("Ah ocurrido un error inesperado");
+          });
+      }else{
+        this.getProducts();
+      }
     },
   },
   mounted() {

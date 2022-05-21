@@ -13,7 +13,8 @@ import {
   faUser,
   faShoppingBag,
   faShoppingCart,
-  faSignOutAlt
+  faSignOutAlt,
+  faChartBar
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -33,7 +34,8 @@ library.add(
   faShoppingBag,
   faShoppingCart,
   faSignOutAlt,
-  faPlus
+  faPlus,
+  faChartBar
 );
 
 export { FontAwesomeIcon };

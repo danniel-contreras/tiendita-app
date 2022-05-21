@@ -6,9 +6,10 @@
   >
     <div class="mt-20 h-full w-full flex flex-col justify-center items-center">
       <div class="w-96 border shadow p-7 rounded flex flex-col">
-        <span class="font-semibold md:text-sm lg:text-base text-gradient text-center font-mono">{{
-          title
-        }}</span>
+        <span
+          class="font-semibold md:text-sm lg:text-base text-gradient text-center font-mono"
+          >{{ title }}</span
+        >
         <div class="mt-4 flex flex-col">
           <label
             for="name"
@@ -130,25 +131,35 @@ export default {
       this.post(values, resetForm);
     },
     post(data, resetForm) {
-      providers.addProvider(data).then(({ data }) => {
-        if (data.ok) {
-          this.$emit("getProviders");
-          resetForm();
-          this.$toast.info(`Se agrego el proveedor`, {
-            position: "bottom-right",
-          });
-        }
-      });
+      providers
+        .addProvider(data)
+        .then(({ data }) => {
+          if (data.ok) {
+            this.$emit("getProviders");
+            resetForm();
+            this.$toast.info(`Se agrego el proveedor`, {
+              position: "bottom-right",
+            });
+          }
+        })
+        .catch(() => {
+          this.$toast.error("Ah ocurrido un error inesperado");
+        });
     },
     put(data) {
-      providers.putProvider(data, this.provider.id).then(({ data }) => {
-        if (data.ok) {
-          this.$emit("getProviders");
-          this.$toast.info(`Se actualizo el proveedor`, {
-            position: "bottom-right",
-          });
-        }
-      });
+      providers
+        .putProvider(data, this.provider.id)
+        .then(({ data }) => {
+          if (data.ok) {
+            this.$emit("getProviders");
+            this.$toast.info(`Se actualizo el proveedor`, {
+              position: "bottom-right",
+            });
+          }
+        })
+        .catch(() => {
+          this.$toast.error("Ah ocurrido un error inesperado");
+        });
     },
   },
 };

@@ -19,16 +19,10 @@
             <td-table :name="us.email" />
             <td-table>
             <div class="flex">
-              <button @click="edit(prov)">
+              <button @click="edit(us)">
                 <font-awesome-icon
                   class="text-white bg-green-500 rounded-full w-3 h-3 p-2"
                   icon="pen"
-                />
-              </button>
-              <button class="ml-3">
-                <font-awesome-icon
-                  class="text-white bg-red-500 rounded-full w-3 h-3 p-2"
-                  icon="trash"
                 />
               </button>
             </div>
@@ -55,8 +49,8 @@ export default {
     ThTable,
   },
   methods: {
-    edit(prov){
-      this.$emit("setEdit",prov)
+    edit(us){
+      this.$emit("setEdit",us)
     }
   },
 };

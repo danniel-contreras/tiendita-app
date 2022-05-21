@@ -21,48 +21,16 @@
                     icon="pen"
                   />
                 </button>
-                <button @click="deleteC(cat)" class="ml-3">
-                  <font-awesome-icon
-                    class="text-white bg-red-500 rounded-full w-3 h-3 p-2"
-                    icon="trash"
-                  />
-                </button>
               </div>
             </td-table>
           </tr>
         </tbody>
       </table>
     </div>
-    <modal-component
-      @close="closeModal"
-      v-show="isModalVisible"
-      title="Eliminar Categoria"
-    >
-      <div class="flex justify-center items-center text-center">
-        <span class="font-mono font-semibold text-center"
-          >¿Estas seguro de eliminar este registro?</span
-        >
-      </div>
-      <div class="grid grid-cols-2 gap-3 mt-3">
-        <button
-        @click="onDelete"
-          class="bg-blue-400 text-white rounded font-mono font-semibold text-xs py-2"
-        >
-          SI, Eliminar
-        </button>
-        <button
-        @click="closeModal"
-          class="bg-red-400 text-white rounded font-mono font-semibold text-xs py-2"
-        >
-          NO, Cancelar
-        </button>
-      </div>
-    </modal-component>
   </div>
 </template>
 
 <script>
-import ModalComponent from "../Global/ModalComponent.vue";
 import TdTable from "../Global/TdTable.vue";
 import ThTable from "../Global/ThTable.vue";
 import categories from "../../api/categories.api";
@@ -76,7 +44,6 @@ export default {
   components: {
     TdTable,
     ThTable,
-    ModalComponent,
   },
   data() {
     return {
@@ -93,10 +60,6 @@ export default {
     },
     edit(categorie) {
       this.$emit("setEdit", categorie);
-    },
-    deleteC(cat) {
-      this.openModal();
-      this.categorie = cat;
     },
     onDelete() {
       categories.deleteCategorie(this.categorie.id).then(({ data }) => {

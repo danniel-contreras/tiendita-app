@@ -6,9 +6,12 @@ import CategoriesView from "../views/CategoriesView.vue";
 import StoresView from "../views/StoresView.vue";
 import ProvidersView from "../views/ProvidersView.vue";
 const ProductsView = () => import("../views/ProductsView.vue");
-const UsersView = () => import("../views/UsersView.vue")
-const ShoppingHistoryView = () => import("../views/ShoppingHistoryView.vue")
-const SalesHistoryView = () => import("../views/SalesHistoryView.vue")
+const UsersView = () => import("../views/UsersView.vue");
+const ShoppingHistoryView = () => import("../views/ShoppingHistoryView.vue");
+const SalesHistoryView = () => import("../views/SalesHistoryView.vue");
+const FinancesView = () => import("../views/FinancesView.vue");
+const BoxDetailsView = () => import("../views/BoxDetailsView.vue");
+const ReportView = () => import("../views/ReportView.vue");
 
 const routes = [
   {
@@ -55,6 +58,21 @@ const routes = [
     path: "/sales-history",
     name: "sales-history",
     component: SalesHistoryView,
+  },
+  {
+    path: "/finances",
+    name: "finances",
+    component: FinancesView,
+  },
+  {
+    path: "/finance-details/:id",
+    name: "finance-details",
+    component: BoxDetailsView,
+  },
+  {
+    path: "/report/:id",
+    name: "report",
+    component: ReportView,
   },
   {
     path: "/about",

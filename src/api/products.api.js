@@ -27,4 +27,14 @@ export default {
       },
     });
   },
+  async getProductsStock() {
+    return await axios.get(
+      `${URL}products/stockMinimun`,
+      {
+        headers: {
+          authorization: getToken(),
+        },
+      }
+    );
+  },
 };

@@ -1,7 +1,7 @@
 <template>
   <layout-view>
     <div class="w-full">
-     <ol
+      <ol
         class="flex justify-center text-gray-500 bg-gray-100 rounded py-2 px-2"
       >
         <li
@@ -41,6 +41,9 @@
         </div>
       </div>
       <providers-table @setEdit="setEdit" :providers="providers" />
+      <span v-show="empty" class="text-gray-600 font-semibold"
+        >No se an registrado proveedores</span
+      >
       <pagination-component
         v-if="totalPag > 1"
         @method="getProviders"
@@ -97,6 +100,8 @@ export default {
   methods: {
     changeBread(op) {
       this.bread = op;
+      this.title = "Agregar nuevo Proveedor";
+      this.provider = {};
     },
     setEdit(provider) {
       this.changeBread(2);
@@ -104,23 +109,43 @@ export default {
       this.provider = { ...provider, storeId: provider.storesId };
     },
     getStores(page = 1) {
-      stores.getStores(page, 100).then(({ data }) => {
-        if (data.ok) {
-          this.stores = data.stores;
-        }
-      });
+      stores
+        .getStores(page, 100)
+        .then(({ data }) => {
+          if (data.ok) {
+            this.stores = data.stores;
+          }
+        })
+        .catch(({ data }) => {
+          this.empty = true;
+          if (!data.ok) {
+            this.$toast.warning("No hay sucursales para mostrar");
+            return;
+          }
+          this.$toast.error("Ah ocurrido un error inesperado");
+        });
     },
     getProviders(page = 1) {
-      providers.getProviders(page).then(({ data }) => {
-        if (data.ok) {
-          this.providers = data.providers;
-          this.pages = paginate(data.curentPag, data.totalPag, 1);
-          this.totalPag = data.totalPag;
-          this.next = data.nextPag;
-          this.prev = data.prevPag;
-          this.currentPage = data.curentPag;
-        }
-      });
+      providers
+        .getProviders(page)
+        .then(({ data }) => {
+          if (data.ok) {
+            this.providers = data.providers;
+            this.pages = paginate(data.curentPag, data.totalPag, 1);
+            this.totalPag = data.totalPag;
+            this.next = data.nextPag;
+            this.prev = data.prevPag;
+            this.currentPage = data.curentPag;
+          }
+        })
+        .catch(({ data }) => {
+          this.empty = true;
+          if (!data.ok) {
+            this.$toast.warning("No hay registros para mostrar");
+            return;
+          }
+          this.$toast.error("Ah ocurrido un error inesperado");
+        });
     },
   },
   mounted() {

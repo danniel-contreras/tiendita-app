@@ -120,25 +120,35 @@ export default {
       this.post(values, resetForm);
     },
     post(data, reset) {
-      stores.addStore(data).then(({ data }) => {
-        if (data.ok) {
-          this.$emit("getStores");
-          reset();
-          this.$toast.info(`Se agrego la sucursal con exito`, {
-            position: "bottom-right",
-          });
-        }
-      });
+      stores
+        .addStore(data)
+        .then(({ data }) => {
+          if (data.ok) {
+            this.$emit("getStores");
+            reset();
+            this.$toast.info(`Se agrego la sucursal con exito`, {
+              position: "bottom-right",
+            });
+          }
+        })
+        .catch(() => {
+          this.$toast.error("Ah ocurrido un error inesperado");
+        });
     },
     put(data) {
-      stores.putStore(data, this.store.id).then(({ data }) => {
-        if (data.ok) {
-          this.$emit("getStores");
-          this.$toast.info(`Se actualizo la sucursal con exito`, {
-            position: "bottom-right",
-          });
-        }
-      });
+      stores
+        .putStore(data, this.store.id)
+        .then(({ data }) => {
+          if (data.ok) {
+            this.$emit("getStores");
+            this.$toast.info(`Se actualizo la sucursal con exito`, {
+              position: "bottom-right",
+            });
+          }
+        })
+        .catch(() => {
+          this.$toast.error("Ah ocurrido un error inesperado");
+        });
     },
   },
 };

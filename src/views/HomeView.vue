@@ -44,11 +44,19 @@ export default {
   },
   methods: {
     getAllSales() {
-      getSales(1, 100000000).then(({ data }) => {
-        this.sales = data.sales;
-        this.all = dataFilter(data.sales);
-        this.total = reduceTotal(data.sales);
-      });
+      getSales(1, 100000000)
+        .then(({ data }) => {
+          this.sales = data.sales;
+          this.all = dataFilter(data.sales);
+          this.total = reduceTotal(data.sales);
+        })
+        .catch(({ data }) => {
+          if (!data.ok) {
+            this.$toast.warning("No hay regsitros para mostrar");
+            return;
+          }
+          this.$toast.error("Ah ocurrido un error inesperado");
+        });
     },
   },
   mounted() {

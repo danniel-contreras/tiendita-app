@@ -12,3 +12,7 @@ createApp(App)
   .use(Toaster)
   .component("font-awesome-icon", FontAwesomeIcon)
   .mount("#app");
+
+window.onbeforeunload = function(){
+  alert("no papum");
+};

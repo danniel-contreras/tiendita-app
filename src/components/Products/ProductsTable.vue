@@ -46,12 +46,6 @@
                     icon="pen"
                   />
                 </button>
-                <button class="ml-3">
-                  <font-awesome-icon
-                    class="text-white bg-red-500 rounded-full w-3 h-3 p-2"
-                    icon="trash"
-                  />
-                </button>
               </div>
             </td-table>
           </tr>

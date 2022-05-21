@@ -11,7 +11,9 @@
         >
           Listado de Sucursales
         </li>
-        <li class="text-gray-500 select-none md:text-xs lg:text-sm">&rsaquo;</li>
+        <li class="text-gray-500 select-none md:text-xs lg:text-sm">
+          &rsaquo;
+        </li>
         <li
           @click="changeBread(2)"
           class="px-2 cursor-pointer text-gradient md:text-xs lg:text-sm"
@@ -39,6 +41,9 @@
         </div>
       </div>
       <stores-table @setEdit="setEdit" :stores="stores" />
+      <span v-show="empty" class="text-gray-600 font-semibold"
+        >No se an registrado sucursales</span
+      >
       <pagination-component
         v-if="totalPag > 1"
         @method="getStores"
@@ -49,7 +54,12 @@
         :prev="prev"
       />
     </template>
-    <stores-form :store="store" :title="title" @getStores="getStores" v-if="bread === 2" />
+    <stores-form
+      :store="store"
+      :title="title"
+      @getStores="getStores"
+      v-if="bread === 2"
+    />
   </layout-view>
 </template>
 
@@ -75,41 +85,54 @@ export default {
     return {
       bread: 1,
       stores: {},
-      title:"Agregar nueva sucursal",
-      store:{},
+      title: "Agregar nueva sucursal",
+      store: {},
       pages: [],
       currentPage: 0,
       next: 0,
       prev: 0,
       totalPag: 0,
+      empty: false,
     };
   },
   methods: {
     changeBread(op) {
       this.bread = op;
+      this.title = "Agregar nueva sucursal";
+      this.provider = {};
     },
     setEdit(store) {
       this.changeBread(2);
-      this.title ="Actualizar sucursal"
+      this.title = "Actualizar sucursal";
       this.store = store;
     },
     getStores(page = 1) {
-      stores.getStores(page).then(({ data }) => {
-        if (data.ok) {
-            console.log(data)
-          this.stores = data.stores;
-          this.pages = paginate(data.curentPag, data.totalPag, 1);
-          this.totalPag = data.totalPag;
-          this.next = data.nextPag;
-          this.prev = data.prevPag;
-          this.currentPage = data.curentPag;
-        }
-      });
+      stores
+        .getStores(page)
+        .then(({ data }) => {
+          if (data.ok) {
+            console.log(data);
+            this.stores = data.stores;
+            this.pages = paginate(data.curentPag, data.totalPag, 1);
+            this.totalPag = data.totalPag;
+            this.next = data.nextPag;
+            this.prev = data.prevPag;
+            this.currentPage = data.curentPag;
+          }
+        })
+        .catch(({ data }) => {
+          this.empty = true;
+          if (!data.ok) {
+            this.$toast.warning("No hay registros para mostrar");
+            return;
+          }
+          this.$toast.error("Ah ocurrido un error inesperado");
+        });
     },
   },
-  mounted(){
-      this.getStores(1)
-  }
+  mounted() {
+    this.getStores(1);
+  },
 };
 </script>
 

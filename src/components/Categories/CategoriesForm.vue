@@ -75,25 +75,35 @@ export default {
       this.post(values, resetForm);
     },
     post(data, reset) {
-      categories.addCategorie(data).then(({ data }) => {
-        if (data.ok) {
-          this.$emit("getCategories");
-          reset();
-          this.$toast.info(`Se agrego el tipo con exito`, {
-            position: "bottom-right",
-          });
-        }
-      });
+      categories
+        .addCategorie(data)
+        .then(({ data }) => {
+          if (data.ok) {
+            this.$emit("getCategories");
+            reset();
+            this.$toast.info(`Se agrego el tipo con exito`, {
+              position: "bottom-right",
+            });
+          }
+        })
+        .catch(() => {
+          this.$toast.error("Ah ocurrido un error inesperado");
+        });
     },
     put(data, id) {
-      categories.putCategorie(data, id).then(({ data }) => {
-        if (data.ok) {
-          this.$emit("getCategories");
-          this.$toast.info(`Se actualizo la categoria con exito`, {
-            position: "bottom-right",
-          });
-        }
-      });
+      categories
+        .putCategorie(data, id)
+        .then(({ data }) => {
+          if (data.ok) {
+            this.$emit("getCategories");
+            this.$toast.info(`Se actualizo la categoria con exito`, {
+              position: "bottom-right",
+            });
+          }
+        })
+        .catch(() => {
+          this.$toast.error("Ah ocurrido un error inesperado");
+        });
     },
   },
 };

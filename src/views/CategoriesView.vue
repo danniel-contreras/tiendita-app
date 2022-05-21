@@ -1,6 +1,6 @@
 <template>
   <layout-view>
-     <div class="w-full">
+    <div class="w-full">
       <ol
         class="flex justify-center text-gray-500 bg-gray-100 rounded py-2 px-2"
       >
@@ -11,7 +11,9 @@
         >
           Listado de Categorias
         </li>
-        <li class="text-gray-500 select-none md:text-xs lg:text-sm">&rsaquo;</li>
+        <li class="text-gray-500 select-none md:text-xs lg:text-sm">
+          &rsaquo;
+        </li>
         <li
           @click="changeBread(2)"
           class="px-2 cursor-pointer text-gradient md:text-xs lg:text-sm"
@@ -23,6 +25,9 @@
     </div>
     <template v-if="bread === 1">
       <categories-table @setEdit="setEdit" :categories="categories" />
+      <span v-show="empty" class="text-gray-600 font-semibold"
+        >No se an registrado categorias</span
+      >
       <pagination-component
         v-if="totalPag > 1"
         @method="getCategories"
@@ -33,7 +38,12 @@
         :prev="prev"
       />
     </template>
-    <categories-form :categorie="categorie" :title="title" @getCategories="getCategories" v-if="bread === 2" />
+    <categories-form
+      :categorie="categorie"
+      :title="title"
+      @getCategories="getCategories"
+      v-if="bread === 2"
+    />
   </layout-view>
 </template>
 
@@ -55,7 +65,7 @@ export default {
   data() {
     return {
       bread: 1,
-      title:"Agregar nueva Categoria",
+      title: "Agregar nueva Categoria",
       categories: {},
       categorie: {},
       pages: [],
@@ -63,28 +73,41 @@ export default {
       next: 0,
       prev: 0,
       totalPag: 0,
+      empty: false,
     };
   },
   methods: {
     changeBread(op) {
       this.bread = op;
+      this.title = "Agregar nueva categoria";
+      this.categorie = {};
     },
     setEdit(categorie) {
       this.changeBread(2);
-      this.title ="Actualizar categoria"
+      this.title = "Actualizar categoria";
       this.categorie = categorie;
     },
     getCategories(page = 1) {
-      categories.getCategories(page).then(({ data }) => {
-        if (data.ok) {
-          this.categories = data.categories;
-          this.pages = paginate(data.curentPag, data.totalPag, 1);
-          this.totalPag = data.totalPag;
-          this.next = data.nextPag;
-          this.prev = data.prevPag;
-          this.currentPage = data.curentPag;
-        }
-      });
+      categories
+        .getCategories(page)
+        .then(({ data }) => {
+          if (data.ok) {
+            this.categories = data.categories;
+            this.pages = paginate(data.curentPag, data.totalPag, 1);
+            this.totalPag = data.totalPag;
+            this.next = data.nextPag;
+            this.prev = data.prevPag;
+            this.currentPage = data.curentPag;
+          }
+        })
+        .catch(({ data }) => {
+          this.empty = true;
+          if (!data.ok) {
+            this.$toast.warning("No hay registros para mostrar");
+            return;
+          }
+          this.$toast.error("Ah ocurrido un error inesperado");
+        });
     },
   },
   mounted() {

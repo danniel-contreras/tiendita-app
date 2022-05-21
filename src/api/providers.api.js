@@ -10,8 +10,8 @@ export default {
       },
     });
   },
-  async getProviders(page) {
-    return await axios.get(`${URL}providers?page=${page}`, {
+  async getProviders(page, take = 5) {
+    return await axios.get(`${URL}providers?page=${page}&take=${take}`, {
       headers: {
         authorization: getToken(),
       },
