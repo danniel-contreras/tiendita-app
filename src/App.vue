@@ -2,18 +2,38 @@
   <router-view />
 </template>
 <script>
-window.onbeforeunload = () => {
-  alert("no papum");
-};
+import { getBox } from "./api/box";
+
 export default {
-  created(){
-   window.onbeforeunload = function(){
-    return "Are you sure you want to close the window?";
-}
+  data() {
+    return {
+      handler: null,
+    };
+  },
+  created() {
+    () => {
+      //do we need to add?
+      if (getBox()) {
+        this.handler = function (e) {
+          // Cancel the event
+          e.preventDefault();
+          // Chrome requires returnValue to be set
+          e.returnValue = "";
+        };
+        window.addEventListener("beforeunload", this.handler);
+        console.log("add watcher");
+      } else if (!getBox()) {
+        window.removeEventListener("beforeunload", this.handler);
+        this.handler = null;
+        console.log("remove watcher");
+      }
+    };
   },
   methods: {
-    handler: function () {
-      alert("Saliendo");
+    removeHandler() {
+      if (this.handler)
+        window.removeEventListener("beforeunload", this.handler);
+      return true;
     },
   },
 };

@@ -33,6 +33,10 @@
         <font-awesome-icon icon="shopping-bag" class="pl-3 text-base" />
          <router-link class="ml-2" to="/sales-history">Historial de Ventas</router-link>
       </li>
+      <li class="text-gray-200 text-xl md:text-sm font-mono font-semibold mt-2">
+        <font-awesome-icon icon="shopping-bag" class="pl-3 text-base" />
+         <router-link class="ml-2" to="/sales-history">Servicios</router-link>
+      </li>
        <li class="text-gray-200 text-xl md:text-sm font-mono font-semibold mt-2">
         <font-awesome-icon icon="chart-bar" class="pl-3 text-base" />
          <router-link class="ml-2" to="/finances">Finanzas</router-link>

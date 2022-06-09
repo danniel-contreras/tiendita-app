@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunktiendita_app"]=self["webpackChunktiendita_app"]||[]).push([[443],{7381:function(n,t,a){a.r(t),a.d(t,{default:function(){return d}});var e=a(9306);const u={class:"about"},i=(0,e._)("h1",null,"This is an about page",-1),r=[i];function s(n,t){return(0,e.wg)(),(0,e.iD)("div",u,r)}var c=a(89);const p={},o=(0,c.Z)(p,[["render",s]]);var d=o}}]);
+//# sourceMappingURL=about.8b23550c.js.map
