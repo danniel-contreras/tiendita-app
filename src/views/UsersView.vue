@@ -96,7 +96,7 @@ export default {
       prev: 0,
       totalPag: 0,
       empty: false,
-      user: {},
+      user: undefined,
     };
   },
   methods: {

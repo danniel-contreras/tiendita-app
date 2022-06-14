@@ -58,7 +58,7 @@
             name="email"
           />
         </div>
-        <div v-show="!user" class="mt-4 flex flex-col">
+        <div v-show="!user.id" class="mt-4 flex flex-col">
           <label
             for="pass"
             class="font-mono text-xs font-semibold from-gray-600"
@@ -176,7 +176,7 @@ export default {
   },
   methods: {
     onSubmit(values, { resetForm }) {
-      if (this.provider) {
+      if (this.user.id) {
         this.put(values);
         return;
       }
