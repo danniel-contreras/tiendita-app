@@ -1,3 +1,2 @@
-//export const URL = "https://api-tiendita-salcuatitan.herokuapp.com/api/v1/"
 
-export const URL = "http://localhost:3001/api/v1/"
+export const URL = "http://143.198.141.84:3001/api/v1/"

@@ -215,7 +215,7 @@ export default {
         .number()
         .required("El stock minimo es requerido")
         .typeError("Stock minimo invalido"),
-      code: yup.string().required("Debes escribir el codigo"),
+      code: yup.string(),
     });
     return {
       schema,
