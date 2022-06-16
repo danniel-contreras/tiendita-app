@@ -84,7 +84,7 @@ export default {
             };
             this.$router.go("/");
             this.$store.dispatch("setAuth", logindata);
-            setToken(data.token, data.data?.roles.id, data.data?.stores.id);
+            setToken(data.token, data.data?.stores.id, data.data?.roles.id);
           }
         })
         .catch(({ response }) => {
