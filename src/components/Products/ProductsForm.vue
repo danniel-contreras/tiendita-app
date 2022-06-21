@@ -229,7 +229,16 @@ export default {
       }
       this.post(resetForm, values);
     },
-    post(resetForm, data) {
+    async post(resetForm, data) {
+      if (data.code !== "") {
+        const prod = await products.getProductByCode(data.code);
+        if (prod.data.ok) {
+          this.$toast.error(`Ya existe un producto con este codigo`, {
+            position: "bottom-right",
+          });
+          return;
+        }
+      }
       products
         .addProduct(data)
         .then(({ data }) => {

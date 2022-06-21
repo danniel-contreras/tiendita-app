@@ -37,4 +37,11 @@ export default {
       }
     );
   },
+  async getProductByCode(code){
+    return await axios.get(`${URL}products/getCode?code=${code}`, {
+      headers: {
+        authorization: getToken(),
+      },
+    })
+  }
 };
