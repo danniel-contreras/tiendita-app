@@ -48,7 +48,7 @@
 import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
 import auth from "../api/auth.api";
-import { decodeToken, setToken } from "../api/token.api";
+import { decodeToken, setToken, setStore, setRole } from "../api/token.api";
 
 export default {
   name: "AuthView",
@@ -84,7 +84,9 @@ export default {
             };
             this.$router.go("/");
             this.$store.dispatch("setAuth", logindata);
-            setToken(data.token, data.data?.stores.id, data.data?.roles.id);
+            setToken(data.token);
+            setStore(data.data?.stores.id);
+            setRole(data.data?.roles.id);
           }
         })
         .catch(({ response }) => {
